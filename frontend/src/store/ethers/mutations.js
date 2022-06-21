@@ -23,5 +23,8 @@ export default {
   },
   wallet: function (state, value) {
     state.wallet = value
+  },
+  rrpContract: function (state, value) {
+    state.rrpContract = value
   }
 }

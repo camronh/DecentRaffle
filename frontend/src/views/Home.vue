@@ -11,6 +11,7 @@
 // @ is an alias to /src
 import { mapActions } from "vuex";
 // import { ethers } from "ethers";
+// import airnodeProtocol from "@api3/airnode-protocol";
 
 export default {
   name: "Home",
@@ -26,8 +27,14 @@ export default {
   methods: {
     ...mapActions({ init: "ethers/init" }),
     async log() {
+      const airnodeProtocol = require("@api3/airnode-protocol");
       console.log("Ready:", await this.init());
       console.log(this.$store.state.ethers);
+      const address = airnodeProtocol.AirnodeRrpAddresses["3"];
+      console.log({ address });
+      console.log(
+        airnodeProtocol.AirnodeRrpV0Factory.connect(address, this.wallet)
+      );
     },
   },
 };

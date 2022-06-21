@@ -105,6 +105,8 @@ export function ready() {
   return !!provider && !!userWallet
 }
 
+
+
 export async function startProviderWatcher() {
   // this should only be run when a ethereum provider is detected and set at the ethereum value above
   async function updateProvider() {

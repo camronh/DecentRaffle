@@ -25,6 +25,7 @@ export default {
       if (!wallet) throw new Error(MSGS.NO_WALLET);
       const address = await getWalletAddress();
       const network = await getNetName();
+      const rrpContract = getRRP(wallet, provider.network.chainId);
 
       if (network !== oldNetwork || address !== oldAddress) {
         ctx.commit("connected", true);
@@ -33,6 +34,7 @@ export default {
         ctx.commit("user", address);
         ctx.commit("network", network);
         ctx.commit("wallet", wallet);
+        ctx.commit("rrpContract", rrpContract);
 
         const msg =
           oldAddress && oldAddress !== address
@@ -132,3 +134,12 @@ export default {
     ctx.commit("initialized", true);
   },
 };
+
+function getRRP(wallet, chainId) {
+  const {
+    AirnodeRrpV0Factory,
+    AirnodeRrpAddresses,
+  } = require("@api3/airnode-protocol");
+  const address = AirnodeRrpAddresses[chainId];
+  return AirnodeRrpV0Factory.connect(address, wallet);
+}
