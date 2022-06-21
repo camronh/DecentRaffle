@@ -3,6 +3,7 @@ const airnodeProtocol = require("@api3/airnode-protocol");
 require("dotenv").config();
 import hre from "hardhat";
 import { ethers } from "hardhat";
+import fs from "fs";
 
 async function getSponsorWallet() {
   const anuXpub =
@@ -64,10 +65,28 @@ async function verifyContract() {
   console.log("Verified!");
 }
 
+function storeAddress(address: string, chainId: number) {
+  // If "./deployed-contract.json" exists, update it.
+  // Otherwise, create it.
+  let addresses: any = {};
+  if (fs.existsSync("./deployed-contract.json")) {
+    addresses = require("./deployed-contract.json");
+  }
+
+  addresses[chainId] = address;
+  fs.writeFileSync("deployed-contracts.json", JSON.stringify(addresses));
+  fs.writeFileSync(
+    "../frontend/src/utils/deployed-contracts.json",
+    JSON.stringify(addresses)
+  );
+  console.log("Addresses Stored!");
+}
+
 export {
   getSponsorWallet,
   sponsorRequester,
   getRaffleContract,
   getRRPContract,
   verifyContract,
+  storeAddress,
 };

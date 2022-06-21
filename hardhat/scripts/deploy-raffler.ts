@@ -4,15 +4,9 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 
-
 import { ethers } from "hardhat";
-const {
-  getSponsorWallet,
-  sponsorRequester,
-  verifyContract,
-} = require("./utils");
-const fs = require("fs");
-const { AirnodeRrpAddresses } = require("@api3/airnode-protocol");
+import { getSponsorWallet, sponsorRequester, storeAddress } from "./utils";
+import { AirnodeRrpAddresses } from "@api3/airnode-protocol";
 
 async function main() {
   let { chainId } = await ethers.provider.getNetwork();
@@ -28,12 +22,7 @@ async function main() {
   await contract.deployed();
   console.log(`Deployed contract: ${contract.address}`);
 
-  fs.writeFileSync(
-    "deployed-contract.json",
-    JSON.stringify({
-      address: contract.address,
-    })
-  );
+  storeAddress(contract.address, chainId);
 
   await sponsorRequester(contract.address);
   console.log("Done! Wait a few minutes before verifying the contract.");
