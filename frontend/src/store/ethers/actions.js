@@ -1,4 +1,5 @@
 /* eslint-disable */
+import ethers from ".";
 import {
   MSGS,
   EVENT_CHANNEL,
@@ -10,6 +11,7 @@ import {
   getWalletAddress,
   getNetName,
   hasEns,
+  Contract,
 } from "./ethersConnect";
 
 export default {
@@ -25,7 +27,8 @@ export default {
       if (!wallet) throw new Error(MSGS.NO_WALLET);
       const address = await getWalletAddress();
       const network = await getNetName();
-      const rrpContract = getRRP(wallet, provider.network.chainId);
+      const rrpContract = getRRP(wallet);
+      const raffleContract = getRaffleContract(wallet);
 
       if (network !== oldNetwork || address !== oldAddress) {
         ctx.commit("connected", true);
@@ -35,6 +38,7 @@ export default {
         ctx.commit("network", network);
         ctx.commit("wallet", wallet);
         ctx.commit("rrpContract", rrpContract);
+        ctx.commit("raffleContract", raffleContract);
 
         const msg =
           oldAddress && oldAddress !== address
@@ -65,9 +69,9 @@ export default {
           }
         }
 
-        provider.on("block", (blockNumber) => {
-          console.log("Block mined:", blockNumber);
-        });
+        // provider.on("block", (blockNumber) => {
+        //   console.log("Block mined:", blockNumber);
+        // });
       }
     } catch (err) {
       ctx.dispatch("disconnect", err);
@@ -135,11 +139,23 @@ export default {
   },
 };
 
-function getRRP(wallet, chainId) {
+function getRRP(wallet) {
   const {
     AirnodeRrpV0Factory,
     AirnodeRrpAddresses,
   } = require("@api3/airnode-protocol");
+
+  const { chainId } = wallet.provider.network;
+  console.log({ chainId });
   const address = AirnodeRrpAddresses[chainId];
   return AirnodeRrpV0Factory.connect(address, wallet);
+}
+
+function getRaffleContract(wallet) {
+  const { chainId } = wallet.provider.network;
+  const raffleAddress = require("../../utils/deployed-contracts.json")[chainId];
+  if (!raffleAddress) throw new Error("Network not supported!");
+
+  const { abi } = require("../../artifacts/contracts/Raffle.sol/Raffler.json");
+  return new Contract(raffleAddress, abi, wallet);
 }

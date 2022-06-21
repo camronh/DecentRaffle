@@ -26,5 +26,8 @@ export default {
   },
   rrpContract: function (state, value) {
     state.rrpContract = value
+  },
+  raffleContract: function (state, value) {
+    state.raffleContract = value
   }
 }
