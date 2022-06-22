@@ -1,8 +1,9 @@
 <template>
   <v-container class="home">
     <v-card>
-      <v-btn v-if="!connected" @click="log">Click Me</v-btn>
-      <v-btn v-else @click="log">{{ $store.state.ethers.address }}</v-btn>
+      <UserRaffles />
+      <!-- <v-btn v-if="!connected" @click="log">Click Me</v-btn> -->
+      <!-- <v-btn v-else @click="log">{{ $store.state.ethers.address }}</v-btn> -->
     </v-card>
   </v-container>
 </template>
@@ -12,10 +13,13 @@
 import { mapActions } from "vuex";
 // import { ethers } from "ethers";
 // import airnodeProtocol from "@api3/airnode-protocol";
+import UserRaffles from "../components/UserRaffles.vue"
 
 export default {
   name: "Home",
-  components: {},
+  components: {
+    UserRaffles
+  },
   computed: {
     connected() {
       return this.$store.state.ethers.connected;

@@ -4,6 +4,7 @@ tasks:
     before: cd frontend
     init: npm i
     command: npm run serve
+    openMode: tab-after
   - name: Contracts
     before: cd hardhat
     init: npm i
