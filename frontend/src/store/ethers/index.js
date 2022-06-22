@@ -13,7 +13,8 @@ const state = () => ({
   network: '',
   ens: null,
   wallet: null,
-  rrpContract: null
+  rrpContract: null,
+  utils: null
 })
 
 export default {

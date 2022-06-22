@@ -29,5 +29,8 @@ export default {
   },
   raffleContract: function (state, value) {
     state.raffleContract = value
+  },
+  utils: function (state, value) {
+    state.utils = value
   }
 }

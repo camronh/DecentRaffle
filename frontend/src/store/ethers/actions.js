@@ -12,6 +12,7 @@ import {
   getNetName,
   hasEns,
   Contract,
+  utils
 } from "./ethersConnect";
 
 export default {
@@ -39,6 +40,8 @@ export default {
         ctx.commit("wallet", wallet);
         ctx.commit("rrpContract", rrpContract);
         ctx.commit("raffleContract", raffleContract);
+        ctx.commit("utils", utils);
+        
 
         const msg =
           oldAddress && oldAddress !== address
