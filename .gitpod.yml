@@ -1,7 +1,13 @@
 # List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
 tasks:
-  - init: cd frontend # runs during prebuild
-    command: npm i && npm run serve
+  - name: FrontEnd # runs during prebuild
+    before: cd frontend
+    init: npm i
+    command: npm run serve
+  - name: Contracts
+    before: cd hardhat
+    init: npm i
+    command: npx hardhat compile
 
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
 ports:
