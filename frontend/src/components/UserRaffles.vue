@@ -1,5 +1,11 @@
 <template>
-  <v-data-table :headers="headers" :items="raffles" item-key="id" dense>
+  <v-data-table
+    :headers="headers"
+    :items="raffles"
+    item-key="id"
+    dense
+    @click:row="goToRaffle"
+  >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title @click="getRaffles">Raffles</v-toolbar-title>
@@ -43,26 +49,7 @@ export default {
         { text: "# Winners", value: "winnerCount" },
         { text: "Ends", value: "endTime" },
       ],
-      raffles: [
-        // {
-        //   title: "Big NFT Drop",
-        //   id: "4",
-        //   price: this.$ethers.utils.parseEther(".5"),
-        //   winnerCount: 5,
-        //   startTime: Date.now(),
-        //   endTime: (Date.now() + 90000) / 1000,
-        //   balance: this.$ethers.utils.parseEther("2"),
-        // },
-        // {
-        //   title: "Second NFT Drop",
-        //   id: "5",
-        //   price: this.$ethers.utils.parseEther(".5"),
-        //   winnerCount: 5,
-        //   startTime: Date.now(),
-        //   endTime: (Date.now() + 90000) / 1000,
-        //   balance: this.$ethers.utils.parseEther("2"),
-        // },
-      ],
+      raffles: [],
     };
   },
   created() {
@@ -85,6 +72,9 @@ export default {
         raffles.push(raffle);
       }
       this.raffles = raffles;
+    },
+    goToRaffle(item) {
+      this.$router.push(`/raffle/${item.id}`);
     },
   },
   computed: {
