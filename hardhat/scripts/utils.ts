@@ -69,8 +69,9 @@ function storeAddress(address: string, chainId: number) {
   // If "./deployed-contract.json" exists, update it.
   // Otherwise, create it.
   let addresses: any = {};
-  if (fs.existsSync("./deployed-contract.json")) {
-    addresses = require("./deployed-contract.json");
+  if (fs.existsSync("deployed-contracts.json")) {
+    console.log("Adding to existing deployed-contracts.json");
+    addresses = require("../deployed-contracts.json");
   }
 
   addresses[chainId] = address;

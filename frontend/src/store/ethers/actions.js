@@ -12,7 +12,7 @@ import {
   getNetName,
   hasEns,
   Contract,
-  utils
+  utils,
 } from "./ethersConnect";
 
 export default {
@@ -41,7 +41,6 @@ export default {
         ctx.commit("rrpContract", rrpContract);
         ctx.commit("raffleContract", raffleContract);
         ctx.commit("utils", utils);
-        
 
         const msg =
           oldAddress && oldAddress !== address
@@ -65,11 +64,12 @@ export default {
 
         // now check for .eth address too
         if (await hasEns()) {
-          console.log("Net supports ENS. Checking...");
-          ctx.commit("ens", await provider.lookupAddress(address));
-          if (ctx.state.ens) {
-            ctx.commit("user", ens);
-          }
+          console.log("Net supports ENS. But not Checking...");
+          // console.log({ address });
+          // ctx.commit("ens", await provider.lookupAddress(address));
+          // if (ctx.state.ens) {
+          //   ctx.commit("user", ens);
+          // }
         }
 
         // provider.on("block", (blockNumber) => {
@@ -148,8 +148,8 @@ function getRRP(wallet) {
     AirnodeRrpAddresses,
   } = require("@api3/airnode-protocol");
 
-  const { chainId } = wallet.provider.network;
-  console.log({ chainId });
+  let { chainId } = wallet.provider.network;
+  if (chainId == 31337) chainId = 4;
   const address = AirnodeRrpAddresses[chainId];
   return AirnodeRrpV0Factory.connect(address, wallet);
 }

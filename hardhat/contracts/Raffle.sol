@@ -23,6 +23,7 @@ contract Raffler is RrpRequesterV0 {
 
     mapping(uint256 => Raffle) public raffles;
     mapping(address => uint256[]) public accountRaffles;
+    mapping(address => mapping(uint256 => uint256)) public accountEntries;
 
     // To store pending Airnode requests
     mapping(bytes32 => bool) public pendingRequestIds;
@@ -121,6 +122,7 @@ contract Raffler is RrpRequesterV0 {
         raffle.balance += msg.value;
         for (uint256 i = 0; i < entryCount; i++) {
             raffle.entries.push(msg.sender);
+            accountEntries[msg.sender][_raffleId]++;
         }
     }
 

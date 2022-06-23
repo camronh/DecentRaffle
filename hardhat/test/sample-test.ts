@@ -49,8 +49,12 @@ describe("Raffle", function () {
     }
 
     const entries = await raffleContract.getEntries(1);
+    const userEntries: number = await raffleContract.accountEntries(
+      address1.address,
+      1
+    );
+    expect(userEntries).to.equal(10);
     expect(entries.length).to.equal(200);
-    console.log(await raffleContract.getAccountRaffles(address1.address));
   });
 
   it.skip("Pick Winner", async function () {

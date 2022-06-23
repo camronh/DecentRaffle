@@ -10,13 +10,13 @@ import { AirnodeRrpAddresses } from "@api3/airnode-protocol";
 
 async function main() {
   let { chainId } = await ethers.provider.getNetwork();
-  if (chainId == 31337) chainId = 4;
+  // if (chainId == 31337) chainId = 4;
   const Contract = await ethers.getContractFactory("Raffler");
   const sponsorWallet = await getSponsorWallet();
 
   console.log("Deploying...");
   const contract = await Contract.deploy(
-    AirnodeRrpAddresses[chainId],
+    chainId == 31337 ? AirnodeRrpAddresses[4] : AirnodeRrpAddresses[chainId],
     sponsorWallet
   );
   await contract.deployed();

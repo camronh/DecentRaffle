@@ -7,8 +7,12 @@
     item-key="id"
     dense
     :expanded.sync="expanded"
-    class="elevation-1"
   >
+    <template v-slot:top>
+      <v-toolbar flat>
+        <v-toolbar-title>Raffles</v-toolbar-title>
+      </v-toolbar>
+    </template>
     <template v-slot:item.endTime="{ item }">
       <!-- {{ timeUntil(item.endTime) }} -->
       {{ timeUntil(item.endTime) }} m
@@ -24,7 +28,6 @@
     </template>
   </v-data-table>
 </template>
-
 
 <script>
 export default {
