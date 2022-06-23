@@ -21,7 +21,6 @@ export default {
   name: "Home",
   components: {
     UserRaffles,
-    // UserEntries,
   },
   computed: {
     connected() {

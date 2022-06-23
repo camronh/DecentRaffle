@@ -8,17 +8,25 @@
     </v-app-bar>
 
     <v-main>
-      <router-view />
+      <v-btn v-if="!$store.state.ethers.connected" @click="init()">
+        Connect Wallet
+      </v-btn>
+      <router-view v-else />
     </v-main>
   </v-app>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "App",
 
   data: () => ({
     //
   }),
+  methods: {
+    ...mapActions({ init: "ethers/init" }),
+  },
 };
 </script>
