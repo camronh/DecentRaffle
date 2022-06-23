@@ -36,7 +36,8 @@ async function sponsorRequester(requesterAddress: string) {
 }
 
 async function getRaffleContract() {
-  const rafflerAddress = require("../deployed-contract.json").address;
+  let { chainId } = await ethers.provider.getNetwork();
+  const rafflerAddress = require("../deployed-contracts.json")[chainId];
   const [account] = await ethers.getSigners();
   return await ethers.getContractAt("Raffler", rafflerAddress, account);
 }

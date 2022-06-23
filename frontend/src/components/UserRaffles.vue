@@ -10,7 +10,7 @@
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Raffles</v-toolbar-title>
+        <v-toolbar-title @click="getRaffles">Raffles</v-toolbar-title>
       </v-toolbar>
     </template>
     <template v-slot:item.endTime="{ item }">
@@ -44,28 +44,26 @@ export default {
         { text: "Price", value: "price" },
         { text: "# Winners", value: "winnerCount" },
         { text: "Ends", value: "endTime" },
-        { text: "Balance", value: "balance" },
-        { text: "", value: "data-table-expand" },
       ],
       raffles: [
-        {
-          title: "Big NFT Drop",
-          id: "4",
-          price: this.$ethers.utils.parseEther(".5"),
-          winnerCount: 5,
-          startTime: Date.now(),
-          endTime: (Date.now() + 90000) / 1000,
-          balance: this.$ethers.utils.parseEther("2"),
-        },
-        {
-          title: "Second NFT Drop",
-          id: "5",
-          price: this.$ethers.utils.parseEther(".5"),
-          winnerCount: 5,
-          startTime: Date.now(),
-          endTime: (Date.now() + 90000) / 1000,
-          balance: this.$ethers.utils.parseEther("2"),
-        },
+        // {
+        //   title: "Big NFT Drop",
+        //   id: "4",
+        //   price: this.$ethers.utils.parseEther(".5"),
+        //   winnerCount: 5,
+        //   startTime: Date.now(),
+        //   endTime: (Date.now() + 90000) / 1000,
+        //   balance: this.$ethers.utils.parseEther("2"),
+        // },
+        // {
+        //   title: "Second NFT Drop",
+        //   id: "5",
+        //   price: this.$ethers.utils.parseEther(".5"),
+        //   winnerCount: 5,
+        //   startTime: Date.now(),
+        //   endTime: (Date.now() + 90000) / 1000,
+        //   balance: this.$ethers.utils.parseEther("2"),
+        // },
       ],
     };
   },
@@ -76,11 +74,17 @@ export default {
       console.log(this.$ethers.utils);
       return Math.round((secondsLeft / 60) * 10) / 10;
     },
+    async getRaffles() {
+      const raffles = await this.ethers.raffleContract.getEnteredRaffles(
+        this.ethers.address
+      );
+      console.log(raffles);
+    },
   },
   computed: {
-    // ethers(){
-    //   return this.$store.state.ethers;
-    // }
+    ethers() {
+      return this.$store.state.ethers;
+    },
   },
 };
 </script>

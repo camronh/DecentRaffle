@@ -23,7 +23,7 @@ contract Raffler is RrpRequesterV0 {
 
     mapping(uint256 => Raffle) public raffles;
     mapping(address => uint256[]) public accountRaffles;
-    mapping(address => mapping(uint256 => uint256)) public accountEntries;
+    mapping(address => uint256[]) public accountEntries;
 
     // To store pending Airnode requests
     mapping(bytes32 => bool) public pendingRequestIds;
@@ -122,8 +122,8 @@ contract Raffler is RrpRequesterV0 {
         raffle.balance += msg.value;
         for (uint256 i = 0; i < entryCount; i++) {
             raffle.entries.push(msg.sender);
-            accountEntries[msg.sender][_raffleId]++;
         }
+        accountEntries[msg.sender].push(raffle.id);
     }
 
     /// @notice Close a raffle
@@ -209,6 +209,16 @@ contract Raffler is RrpRequesterV0 {
         returns (address[] memory)
     {
         return raffles[_raffleId].winners;
+    }
+
+    /// @notice Get the raffles the user has entered
+    /// @param _address Address of the user
+    function getEnteredRaffles(address _address)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return accountEntries[_address];
     }
 
     function isWinner(uint256 _raffleId, address _address)

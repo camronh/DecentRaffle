@@ -49,11 +49,10 @@ describe("Raffle", function () {
     }
 
     const entries = await raffleContract.getEntries(1);
-    const userEntries: number = await raffleContract.accountEntries(
-      address1.address,
-      1
+    const [firstEntry] = await raffleContract.getEnteredRaffles(
+      address1.address
     );
-    expect(userEntries).to.equal(10);
+    expect(firstEntry).to.equal(1);
     expect(entries.length).to.equal(200);
   });
 
