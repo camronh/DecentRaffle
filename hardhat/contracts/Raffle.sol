@@ -43,7 +43,7 @@ contract Raffler is RrpRequesterV0 {
         0x27cc2713e7f968e4e86ed274a051a5c8aaee9cca66946f23af6f29ecea9704c3;
 
     struct Raffle {
-        uint256 id;
+        uint256 raffleId;
         string title;
         uint256 price;
         uint256 winnerCount;
@@ -96,9 +96,9 @@ contract Raffler is RrpRequesterV0 {
             msg.sender,
             false
         );
-        raffles[raffle.id] = raffle;
-        accountRaffles[msg.sender].push(raffle.id);
-        emit RaffleCreated(raffle.id);
+        raffles[raffle.raffleId] = raffle;
+        accountRaffles[msg.sender].push(raffle.raffleId);
+        emit RaffleCreated(raffle.raffleId);
     }
 
     /// @notice Enter a raffle
@@ -123,7 +123,7 @@ contract Raffler is RrpRequesterV0 {
         for (uint256 i = 0; i < entryCount; i++) {
             raffle.entries.push(msg.sender);
         }
-        accountEntries[msg.sender].push(raffle.id);
+        accountEntries[msg.sender].push(raffle.raffleId);
     }
 
     /// @notice Close a raffle
@@ -139,7 +139,7 @@ contract Raffler is RrpRequesterV0 {
             "Only raffle owner can pick winners"
         );
         require(raffle.open, "Raffle is closed");
-
+        // require(block.timestamp >= raffle.endTime, "Raffle is still open");
         if (raffle.entries.length == 0) {
             raffle.open = false;
             return;

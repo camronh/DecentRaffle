@@ -36,7 +36,7 @@ describe("Raffle", function () {
       (event: Event) => event.event === "RaffleCreated"
     ).args;
     const raffle = await raffleContract.raffles(raffleId);
-    expect(raffle.id).to.equal(1);
+    expect(raffle.raffleId).to.equal(1);
   });
 
   it("Enters raffle", async function () {

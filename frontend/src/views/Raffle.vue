@@ -1,9 +1,9 @@
 <template>
   <v-card>
-    <p v-if="raffle.id == 0">Not a valid raffle ID</p>
+    <p v-if="raffle.raffleId == 0">Not a valid raffle ID</p>
     <template v-else>
       <v-card-title>
-        {{ raffle.title }} (ID: {{ raffle.id }})
+        {{ raffle.title }} (ID: {{ raffle.raffleId }})
         <v-spacer></v-spacer>
         {{ owner ? weiToEth(raffle.balance) : weiToEth(raffle.price) }}
       </v-card-title>
@@ -12,7 +12,12 @@
           <v-col cols="12" md="6">
             <v-card outlined height="100%">
               <v-card-text>
-                <p><b>Owner:</b> {{ raffle.owner }}</p>
+                <p>
+                  <b>Owner:</b> {{ raffle.owner }}
+                  <v-icon v-if="owner" x-small color="primary"
+                    >mdi-check-circle</v-icon
+                  >
+                </p>
                 <p><b>Price: </b> {{ weiToEth(raffle.price) }}</p>
                 <p><b>Entries:</b> {{ entries.length }}</p>
                 <p><b>Winner Count:</b> {{ raffle.winnerCount }}</p>
@@ -48,6 +53,8 @@
                           text
                           outlined
                           color="primary"
+                          @click="enterRaffle"
+                          :loading="entering"
                         >
                           <span><v-icon>mdi-check</v-icon></span>
                         </v-btn>
@@ -64,10 +71,13 @@
         </v-row>
       </v-card-text>
     </template>
+    <SnackBar :log="snackBarLog" />
   </v-card>
 </template>
 
 <script>
+import SnackBar from "../components/SnackBar.vue";
+
 export default {
   name: "Raffle",
   data() {
@@ -75,7 +85,16 @@ export default {
       raffle: null,
       entries: [],
       entriesCount: 1,
+      entering: false,
+      snackBarLog: {
+        open: false,
+        msg: "",
+        color: "",
+      },
     };
+  },
+  components: {
+    SnackBar,
   },
   methods: {
     async getRaffle() {
@@ -97,6 +116,35 @@ export default {
     },
     weiToEth(wei) {
       return `${this.$ethers.utils.formatEther(wei)} Ξ`;
+    },
+    async enterRaffle() {
+      this.entering = true;
+      try {
+        const totalCost = this.entriesCount * this.raffle.price;
+        const tx = await this.ethers.raffleContract.enter(
+          this.$route.params.id,
+          this.entriesCount,
+          {
+            value: totalCost,
+          }
+        );
+        await tx.wait();
+        await this.getRaffle();
+        this.entriesCount = 1;
+        this.snackBarLog = {
+          open: true,
+          msg: "Successfully entered raffle!",
+          color: "green",
+        };
+      } catch (error) {
+        console.log(error);
+        this.snackBarLog = {
+          open: true,
+          msg: "Entering raffle failed!",
+          color: "error",
+        };
+      }
+      this.entering = false;
     },
     //
   },

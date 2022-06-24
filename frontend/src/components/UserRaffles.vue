@@ -2,7 +2,7 @@
   <v-data-table
     :headers="headers"
     :items="raffles"
-    item-key="id"
+    item-key="raffleId"
     dense
     @click:row="goToRaffle"
   >
@@ -14,16 +14,10 @@
       </v-toolbar>
     </template>
     <template v-slot:item.endTime="{ item }">
-      <!-- {{ timeUntil(item.endTime) }} -->
       {{ timeUntil(item.endTime) }} m
-    </template>
-    <template v-slot:item.balance="{ item }">
-      <!-- {{ timeUntil(item.endTime) }} -->
-      {{ $ethers.utils.formatEther(item.balance) }}
     </template>
 
     <template v-slot:item.price="{ item }">
-      <!-- {{ timeUntil(item.endTime) }} -->
       {{ $ethers.utils.formatEther(item.price) }}
     </template>
   </v-data-table>
@@ -31,6 +25,7 @@
 
 <script>
 import CreateRaffle from "../components/CreateRaffleDialog.vue";
+
 export default {
   components: {
     CreateRaffle,
@@ -39,7 +34,7 @@ export default {
     return {
       expanded: [],
       headers: [
-        { text: "ID", value: "id", align: "start" },
+        { text: "ID", value: "raffleId", align: "start" },
         {
           text: "Title",
           sortable: true,
@@ -63,9 +58,15 @@ export default {
       return Math.round((secondsLeft / 60) * 10) / 10;
     },
     async getRaffles() {
-      const raffleIds = await this.ethers.raffleContract.getEnteredRaffles(
+      let raffleIds = await this.ethers.raffleContract.getEnteredRaffles(
         this.ethers.address
       );
+      // Remove duplicate BigNumbers raffleIds based on hex
+      raffleIds = raffleIds.map((raffleId) => raffleId.toString());
+      raffleIds = [...new Set(raffleIds)];
+
+      console.log({ raffleIds });
+
       let raffles = [];
       for (let raffleId of raffleIds) {
         const raffle = await this.ethers.raffleContract.raffles(raffleId);
@@ -74,7 +75,7 @@ export default {
       this.raffles = raffles;
     },
     goToRaffle(item) {
-      this.$router.push(`/raffle/${item.id}`);
+      this.$router.push(`/raffle/${item.raffleId}`);
     },
   },
   computed: {
