@@ -15,6 +15,13 @@
     </template>
     <template v-slot:item.endTime="{ item }">
       <v-chip v-if="!item.open" x-small outlined color="grey">Closed</v-chip>
+      <v-chip
+        v-else-if="item.open && timeUntil(item.endTime) == 0"
+        x-small
+        outlined
+        color="primary"
+        >Closable!</v-chip
+      >
       <template v-else> {{ timeUntil(item.endTime) }} m </template>
     </template>
 
@@ -61,8 +68,8 @@ export default {
     timeUntil(endTime) {
       const now = Date.now() / 1000;
       const secondsLeft = endTime - now;
-      console.log(this.$ethers.utils);
-      return Math.round((secondsLeft / 60) * 10) / 10;
+      const minutes = Math.round((secondsLeft / 60) * 10) / 10;
+      return minutes > 0 ? minutes : 0;
     },
     owner(address) {
       return this.ethers.address == address;
