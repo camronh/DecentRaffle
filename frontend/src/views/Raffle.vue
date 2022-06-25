@@ -62,7 +62,7 @@
                     </v-text-field>
                   </v-col>
                 </template>
-                <v-btn color="primary" class="mx-2" v-else>
+                <v-btn color="primary" class="mx-2" v-else @click="closeRaffle">
                   <span>Close Raffle</span>
                 </v-btn>
               </v-card-text>
@@ -145,6 +145,32 @@ export default {
         };
       }
       this.entering = false;
+    },
+    async closeRaffle() {
+      this.closing = true;
+      try {
+        const tx = await this.ethers.raffleContract.close(
+          this.$route.params.id,
+          {
+            value: this.$ethers.utils.parseEther("0.001"),
+          }
+        );
+        await tx.wait();
+        await this.getRaffle();
+        this.snackBarLog = {
+          open: true,
+          msg: "Successfully closed raffle!",
+          color: "green",
+        };
+      } catch (error) {
+        console.log(error);
+        this.snackBarLog = {
+          open: true,
+          msg: "Closing raffle failed!",
+          color: "error",
+        };
+      }
+      this.closing = false;
     },
     //
   },

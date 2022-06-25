@@ -134,10 +134,10 @@ contract Raffler is RrpRequesterV0 {
     /// @param _raffleId The raffle id to close
     function close(uint256 _raffleId) public payable {
         Raffle storage raffle = raffles[_raffleId];
-        require(
-            msg.sender == raffle.owner,
-            "Only raffle owner can pick winners"
-        );
+        // require(
+        //     msg.sender == raffle.owner,
+        //     "Only raffle owner can pick winners"
+        // );
         require(raffle.open, "Raffle is closed");
         // require(block.timestamp >= raffle.endTime, "Raffle is still open");
         if (raffle.entries.length == 0) {
