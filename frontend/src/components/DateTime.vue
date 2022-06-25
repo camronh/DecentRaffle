@@ -56,11 +56,22 @@ export default {
     dateMenu: true,
   }),
   components: {},
-  props: ["title"],
+  props: ["title", "value", "now"],
   methods: {
     updateTimestamp() {
       this.$emit("input", this.utcDateTime);
     },
+  },
+  created() {
+    if (this.value) {
+      // convert unix timestamp to ISO 8601 date using moment.js
+      this.date = this.moment(this.value * 1000).format("YYYY-MM-DD");
+      this.time = this.moment(this.value * 1000).format("HH:mm");
+    } else if (this.now) {
+      this.date = this.moment().format("YYYY-MM-DD");
+      this.time = this.moment().format("HH:mm");
+      this.updateTimestamp();
+    }
   },
   computed: {
     dateAndTime() {

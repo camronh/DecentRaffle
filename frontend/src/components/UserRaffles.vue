@@ -10,15 +10,22 @@
       <v-toolbar flat>
         <v-toolbar-title @click="getRaffles">Raffles</v-toolbar-title>
         <v-spacer></v-spacer>
-        <CreateRaffle />
+        <CreateRaffle @success="getRaffles" />
       </v-toolbar>
     </template>
     <template v-slot:item.endTime="{ item }">
-      {{ timeUntil(item.endTime) }} m
+      <v-chip v-if="!item.open" x-small outlined color="grey">Closed</v-chip>
+      <template v-else> {{ timeUntil(item.endTime) }} m </template>
     </template>
 
     <template v-slot:item.price="{ item }">
       {{ $ethers.utils.formatEther(item.price) }}
+    </template>
+    <template v-slot:item.title="{ item }">
+      {{ item.title }}
+      <v-icon v-if="owner(item.owner)" color="primary" x-small
+        >mdi-check</v-icon
+      >
     </template>
   </v-data-table>
 </template>
@@ -57,20 +64,32 @@ export default {
       console.log(this.$ethers.utils);
       return Math.round((secondsLeft / 60) * 10) / 10;
     },
+    owner(address) {
+      return this.ethers.address == address;
+    },
     async getRaffles() {
       let raffleIds = await this.ethers.raffleContract.getEnteredRaffles(
         this.ethers.address
       );
-      // Remove duplicate BigNumbers raffleIds based on hex
       raffleIds = raffleIds.map((raffleId) => raffleId.toString());
       raffleIds = [...new Set(raffleIds)];
 
-      console.log({ raffleIds });
+      let ownedRaffles = await this.ethers.raffleContract.getAccountRaffles(
+        this.ethers.address
+      );
+      let raffles = [...ownedRaffles];
 
-      let raffles = [];
+      const ownedRaffleIds = ownedRaffles.map((raffle) =>
+        raffle.raffleId.toString()
+      );
+
       for (let raffleId of raffleIds) {
-        const raffle = await this.ethers.raffleContract.raffles(raffleId);
-        raffles.push(raffle);
+        console.log({ raffleId });
+        if (!ownedRaffleIds.includes(raffleId)) {
+          const raffle = await this.ethers.raffleContract.raffles(raffleId);
+          console.log({ raffle });
+          raffles.push(raffle);
+        }
       }
       this.raffles = raffles;
     },

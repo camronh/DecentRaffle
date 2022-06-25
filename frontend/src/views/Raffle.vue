@@ -120,12 +120,13 @@ export default {
     async enterRaffle() {
       this.entering = true;
       try {
-        const totalCost = this.entriesCount * this.raffle.price;
+        const totalCost =
+          this.entriesCount * this.$ethers.utils.formatEther(this.raffle.price);
         const tx = await this.ethers.raffleContract.enter(
           this.$route.params.id,
           this.entriesCount,
           {
-            value: totalCost,
+            value: this.$ethers.utils.parseEther(`${totalCost}`),
           }
         );
         await tx.wait();
