@@ -21,6 +21,7 @@
                 <p><b>Price: </b> {{ weiToEth(raffle.price) }}</p>
                 <p><b>Entries:</b> {{ entries.length }}</p>
                 <p><b>Winner Count:</b> {{ raffle.winnerCount }}</p>
+                <p><b>Your Entries:</b> {{ userEntries }}</p>
               </v-card-text>
             </v-card>
           </v-col>
@@ -112,7 +113,6 @@ export default {
     async getEntries() {
       const raffleId = this.$route.params.id;
       this.entries = await this.ethers.raffleContract.getEntries(raffleId);
-      console.log({ entries: this.entries });
     },
     weiToEth(wei) {
       return `${this.$ethers.utils.formatEther(wei)} Ξ`;
@@ -191,6 +191,10 @@ export default {
     },
     enterable() {
       return this.raffle.open && this.timeUntil(this.raffle.endTime) > 0;
+    },
+    userEntries() {
+      return this.entries.filter((entry) => entry == this.ethers.address)
+        .length;
     },
   },
 };
