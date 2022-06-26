@@ -11,6 +11,7 @@
         <v-row>
           <v-col cols="12" md="6">
             <v-card outlined height="100%">
+              <v-card-title> Details </v-card-title>
               <v-card-text>
                 <p>
                   <b>Owner:</b> {{ raffle.owner }}
@@ -26,7 +27,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" md="6">
-            <v-card outlined height="100%">
+            <v-card outlined height="100%" v-if="raffle.open">
               <v-card-text justify="center" align="center">
                 <h1>{{ timeUntil(raffle.endTime) }} min</h1>
                 <br />
@@ -63,11 +64,13 @@
                     </v-text-field>
                   </v-col>
                 </template>
+                <!-- TODO: Loading -->
                 <v-btn color="primary" class="mx-2" v-else @click="closeRaffle">
                   <span>Close Raffle</span>
                 </v-btn>
               </v-card-text>
             </v-card>
+            <WinnersCard v-else :raffle="raffle" @found="getRaffle()" />
           </v-col>
         </v-row>
       </v-card-text>
@@ -78,6 +81,7 @@
 
 <script>
 import SnackBar from "../components/SnackBar.vue";
+import WinnersCard from "../components/WinnersCard.vue";
 
 export default {
   name: "Raffle",
@@ -96,14 +100,18 @@ export default {
   },
   components: {
     SnackBar,
+    WinnersCard,
   },
   methods: {
     async getRaffle() {
       const raffleId = this.$route.params.id;
       let raffle = await this.ethers.raffleContract.raffles(raffleId);
+      raffle = { ...raffle };
       await this.getEntries();
+      raffle.winners = await this.getWinners();
       this.raffle = raffle;
     },
+
     timeUntil(endTime) {
       const now = Date.now() / 1000;
       const secondsLeft = endTime - now;
@@ -113,6 +121,10 @@ export default {
     async getEntries() {
       const raffleId = this.$route.params.id;
       this.entries = await this.ethers.raffleContract.getEntries(raffleId);
+    },
+    async getWinners() {
+      const raffleId = this.$route.params.id;
+      return await this.ethers.raffleContract.getWinners(raffleId);
     },
     weiToEth(wei) {
       return `${this.$ethers.utils.formatEther(wei)} Ξ`;

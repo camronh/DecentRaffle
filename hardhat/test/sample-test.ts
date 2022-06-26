@@ -87,4 +87,6 @@ describe("Raffle", function () {
     const params = await raffleContract.getParams(5);
     expect(params).to.equal(encodedData);
   });
+
+  it.skip("Test events", async function () {});
 });

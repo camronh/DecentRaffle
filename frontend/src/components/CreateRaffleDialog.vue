@@ -76,6 +76,7 @@ export default {
   },
   methods: {
     async createRaffle() {
+      // TODO: Loading
       try {
         console.log(this.startTime, this.endTime);
         const { raffleContract } = this.ethers;
@@ -87,6 +88,7 @@ export default {
           this.startTime,
           this.endTime
         );
+        
         const rc = await createTx.wait();
         const [raffleId] = rc.events.find(
           (event) => event.event === "RaffleCreated"

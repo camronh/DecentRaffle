@@ -19,7 +19,8 @@ contract Raffler is RrpRequesterV0 {
     using Counters for Counters.Counter;
     Counters.Counter private _ids;
 
-    event RaffleCreated(uint256 _raffleId);
+    event RaffleCreated(uint256 indexed _raffleId);
+    event WinnersPicked(uint256 indexed _raffleId);
 
     mapping(uint256 => Raffle) public raffles;
     mapping(address => uint256[]) public accountRaffles;
@@ -142,6 +143,7 @@ contract Raffler is RrpRequesterV0 {
         // require(block.timestamp >= raffle.endTime, "Raffle is still open");
         if (raffle.entries.length == 0) {
             raffle.open = false;
+            raffle.airnodeSuccess = true;
             return;
         }
         require(
@@ -188,6 +190,7 @@ contract Raffler is RrpRequesterV0 {
             removeAddress(winnerIndex, raffle.entries);
         }
         raffle.airnodeSuccess = true;
+        emit WinnersPicked(raffle.raffleId);
         payable(raffle.owner).transfer(raffle.balance);
     }
 

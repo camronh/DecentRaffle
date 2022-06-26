@@ -41,6 +41,7 @@ export default {
         ctx.commit("rrpContract", rrpContract);
         ctx.commit("raffleContract", raffleContract);
         ctx.commit("utils", utils);
+        ctx.commit("provider", provider);
 
         const msg =
           oldAddress && oldAddress !== address
