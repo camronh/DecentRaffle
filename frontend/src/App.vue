@@ -8,9 +8,15 @@
     </v-app-bar>
 
     <v-main>
-      <v-btn v-if="!$store.state.ethers.connected" @click="init()">
-        Connect Wallet
-      </v-btn>
+      <v-container
+        align="center"
+        justify="center"
+        v-if="!$store.state.ethers.connected"
+      >
+        <br />
+        <v-btn outlined @click="init()"> Connect Wallet </v-btn>
+      </v-container>
+
       <router-view v-else />
     </v-main>
   </v-app>

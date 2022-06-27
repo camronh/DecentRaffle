@@ -1,10 +1,7 @@
 <template>
   <v-container class="home">
     <v-card>
-      <v-btn v-if="!connected" @click="log">Connect Wallet</v-btn>
-      <template v-else>
-        <UserRaffles />
-      </template>
+      <UserRaffles />
     </v-card>
   </v-container>
 </template>

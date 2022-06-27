@@ -40,7 +40,7 @@ const config: HardhatUserConfig = {
       url: rinkebyRPC,
       accounts: [privateKey],
     },
-    matic: {
+    mumbai: {
       url: mumbaiRPC,
       accounts: [privateKey],
     },
