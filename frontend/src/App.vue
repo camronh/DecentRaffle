@@ -5,6 +5,7 @@
         <v-icon>mdi-home</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
+      <!-- TODO: #4 Info Dialog -->
     </v-app-bar>
 
     <v-main>
@@ -14,6 +15,7 @@
         v-if="!$store.state.ethers.connected"
       >
         <br />
+        <!-- TODO: #2 Center this -->
         <v-btn outlined @click="init()"> Connect Wallet </v-btn>
       </v-container>
 

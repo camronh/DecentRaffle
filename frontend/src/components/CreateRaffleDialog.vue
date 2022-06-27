@@ -3,6 +3,7 @@
     <v-icon>mdi-plus</v-icon>
     <v-dialog v-model="dialogOpen" max-width="50%">
       <v-card>
+        <!-- TODO: #3 Validation -->
         <v-card-title>
           <span class="headline">Create Raffle </span>
         </v-card-title>
