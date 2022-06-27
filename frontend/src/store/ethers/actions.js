@@ -133,6 +133,7 @@ export default {
       event.$emit(EVENT_CHANNEL, MSGS.ETHERS_VUEX_INITIALIZED);
     } else {
       console.log("Log in to your Ethereum wallet to see what it can do!");
+      await connect();
       // Usually should trigger connect on a user interaction as a best practice!
       // Replace this with a user button??
       // if (confirm('Welcome! You can replace "alert" and "confirm" statements in this vuex module with your own code to do more useful things. If you would like to connect to your Ethereum provider (e.g. MetaMask) for the first time click "Yes" now.')) {

@@ -16,6 +16,7 @@
       >
         <br />
         <!-- TODO: #2 Center this -->
+        <!-- TODO: #5 Init wallets not working -->
         <v-btn outlined @click="init()"> Connect Wallet </v-btn>
       </v-container>
 
