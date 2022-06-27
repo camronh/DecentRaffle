@@ -6,13 +6,30 @@
         :items="raffles"
         item-key="raffleId"
         dense
+        :search="search"
         @click:row="goToRaffle"
       >
         <template v-slot:top>
           <v-toolbar flat>
             <v-toolbar-title @click="getRaffles">Raffles</v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
             <!-- TODO: #1 Create a search bar -->
+            <v-text-field
+              outlined
+              dense
+              v-model="search"
+              placeholder="RaffleID"
+              label="Search"
+            >
+            </v-text-field>
+            <v-btn
+              :disabled="!search || isNaN(search)"
+              @click="goToRaffle({ raffleId: search })"
+            >
+              <v-icon> mdi-magnify </v-icon>
+            </v-btn>
             <CreateRaffle @success="getRaffles" />
           </v-toolbar>
         </template>
@@ -54,6 +71,7 @@ export default {
   data() {
     return {
       expanded: [],
+      search: "",
       headers: [
         { text: "ID", value: "raffleId", align: "start" },
         {

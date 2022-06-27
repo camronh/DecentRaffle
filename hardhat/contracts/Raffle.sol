@@ -82,6 +82,10 @@ contract Raffler is RrpRequesterV0 {
         uint256 _endTime
     ) public {
         require(_winnerCount > 0, "Winner count must be greater than 0");
+        require(
+            block.timestamp < _endTime + 60,
+            "Raffle must last at least 1 minute"
+        );
         _ids.increment();
         Raffle memory raffle = Raffle(
             _ids.current(),
