@@ -49,6 +49,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="white" flat @click="dialogOpen = false"> Cancel </v-btn>
+          <!-- TODO: #10 Loading here -->
           <v-btn color="primary" flat @click="createRaffle" :disabled="!valid">
             Create
           </v-btn>

@@ -15,7 +15,7 @@
       </v-col>
     </v-row>
 
-    <p v-if="raffle.raffleId <= 0">Not a valid raffle ID</p>
+    <p v-else-if="raffle.raffleId <= 0">Not a valid raffle ID</p>
 
     <template v-else-if="raffle">
       <v-card-title>
