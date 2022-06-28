@@ -55,10 +55,13 @@ async function getRRPContract() {
 
 async function verifyContract() {
   console.log("Verifying Contract...");
+  let { chainId } = await ethers.provider.getNetwork();
+  const address = require("../deployed-contracts.json")[chainId];
 
-  const { address } = require("../deployed-contract.json");
   const rrp = await getRRPContract();
   const sponsorWallet = await getSponsorWallet();
+  console.log(`Sponsor Wallet: ${sponsorWallet}`);
+  console.log(`Raffler Address: ${address}`);
   await hre.run("verify:verify", {
     address,
     constructorArguments: [rrp.address, sponsorWallet],
