@@ -1,8 +1,23 @@
 <template>
   <v-card>
+    <v-row v-if="!raffle">
+      <v-col cols="12" md="6">
+        <v-skeleton-loader
+          class="mx-auto"
+          type="card"
+        ></v-skeleton-loader>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-skeleton-loader
+          class="mx-auto"
+          type="card"
+        ></v-skeleton-loader>
+      </v-col>
+    </v-row>
+
     <p v-if="raffle.raffleId <= 0">Not a valid raffle ID</p>
-    <!-- TODO: #7 Skeleton loader -->
-    <template v-else>
+
+    <template v-else-if="raffle">
       <v-card-title>
         {{ raffle.title }} (ID: {{ raffle.raffleId }})
         <v-spacer></v-spacer>
@@ -188,7 +203,7 @@ export default {
     },
     //
   },
-  created() {
+  mounted() {
     this.getRaffle();
   },
   computed: {

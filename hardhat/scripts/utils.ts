@@ -66,7 +66,7 @@ async function verifyContract() {
     address,
     constructorArguments: [rrp.address, sponsorWallet],
   });
-  console.log("Verified!");
+  console.log("\nVerified!");
 }
 
 function storeAddress(address: string, chainId: number) {
