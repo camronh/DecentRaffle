@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color="primary" dark>
+      <!-- TODO: #8 Real app bar -->
       <v-btn icon link to="/">
         <v-icon>mdi-home</v-icon>
       </v-btn>
@@ -16,7 +17,6 @@
       >
         <br />
         <!-- TODO: #2 Center this -->
-        <!-- TODO: #5 Init wallets not working -->
         <v-btn outlined @click="init()"> Connect Wallet </v-btn>
       </v-container>
 

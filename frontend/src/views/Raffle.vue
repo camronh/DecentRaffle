@@ -1,6 +1,7 @@
 <template>
   <v-card>
     <p v-if="raffle.raffleId <= 0">Not a valid raffle ID</p>
+    <!-- TODO: #7 Skeleton loader -->
     <template v-else>
       <v-card-title>
         {{ raffle.title }} (ID: {{ raffle.raffleId }})
