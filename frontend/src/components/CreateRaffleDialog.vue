@@ -50,7 +50,13 @@
           <v-spacer></v-spacer>
           <v-btn color="white" flat @click="dialogOpen = false"> Cancel </v-btn>
           <!-- TODO: #10 Loading here -->
-          <v-btn color="primary" flat @click="createRaffle" :disabled="!valid">
+          <v-btn
+            color="primary"
+            flat
+            @click="createRaffle"
+            :disabled="!valid"
+            :loading="creating"
+          >
             Create
           </v-btn>
         </v-card-actions>
@@ -73,12 +79,14 @@ export default {
       price: ".5",
       winnerCount: "5",
       startTime: "",
-      endTime: "1656179560",
+      endTime: "1656199560",
+      creating: false,
     };
   },
   methods: {
     async createRaffle() {
       // TODO: Loading
+      this.creating = true;
       try {
         console.log(this.startTime, this.endTime);
         const { raffleContract } = this.ethers;
@@ -90,7 +98,7 @@ export default {
           this.startTime,
           this.endTime
         );
-        
+
         const rc = await createTx.wait();
         const [raffleId] = rc.events.find(
           (event) => event.event === "RaffleCreated"
@@ -101,6 +109,7 @@ export default {
       } catch (error) {
         console.log(error);
       }
+      this.creating = false;
     },
   },
   computed: {
